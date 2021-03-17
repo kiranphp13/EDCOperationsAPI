@@ -60,7 +60,7 @@ namespace BoService.Controllers
                         var post = new User(Db)
                         {
                             FullName = reader.GetString(0),
-                            Password = reader.GetString(1),
+                            Password = DecryptPassword(reader.GetString(1)),
                             Email = reader.GetString(2),
                             Phone = reader.GetString(3),
                             Role = reader.GetString(4),
@@ -78,6 +78,28 @@ namespace BoService.Controllers
                 posts = null;
             }
             return posts;
+        }
+
+        public string DecryptPassword(string strPassword)
+        {
+            string strReturnPassword = string.Empty;
+
+            try
+            {
+                if (string.IsNullOrEmpty(strPassword))
+                {
+                    throw new ArgumentNullException("Password should not be null or empty...");
+                }
+                else
+                {
+                    strReturnPassword = SecurePassword.DecryptPassword(strPassword, SecurePassword.EncDecType.BASE64);
+                }
+            }
+            catch (Exception Ex)
+            {
+
+            }
+            return strReturnPassword;
         }
 
         // GET api/<controller>/5  
