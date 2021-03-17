@@ -275,5 +275,28 @@ namespace BoService.Models
             }
             return strReturnPassword;
         }
+
+
+        public bool UpdateProfile(User userData)
+        {
+            bool bIsRecordAdded = false;
+            try
+            {
+                string strEncryptedPassword = EncryptPassword(userData.Password);
+                string Query = "update edc.bousers set FullName='" + userData.FullName + "',UserName='" + userData.UserName + "',Password='" + strEncryptedPassword + "',Email='" + userData.Email + "'," +
+                    "Phone='" + userData.Phone + "',Address='" + userData.Address + "' where id=" + userData.Id + ";";
+                var cmd = Db.Connection.CreateCommand();
+                cmd.CommandText = Query;
+                cmd.ExecuteNonQuery();
+                bIsRecordAdded = true;
+            }
+            catch (Exception ex)
+            {
+                bIsRecordAdded = false;
+            }
+            return bIsRecordAdded;
+        }
+
+
     }
 }

@@ -223,5 +223,52 @@ namespace BoService.Controllers
             }
             return response;
         }
+
+        [HttpPost]
+        [Route("UpdateProfile")]
+        public Dictionary<string, object> UpdateProfile([FromBody] BoService.Models.User value)
+        {
+
+
+            Dictionary<string, object> response = new Dictionary<string, object>();
+            try
+            {
+                Db.Connection.Open();
+                bool bIsValidUser = false;
+
+                BoService.Models.User objUser = new BoService.Models.User(Db);
+
+                bool bIsUserCreated = false;
+                objUser.UserName = value.UserName;
+                objUser.Id = value.Id;
+
+                bIsValidUser = objUser.IsUserNameExistsEdit();
+                if (bIsValidUser == false)
+                {
+                    bIsUserCreated = objUser.UpdateProfile(value);
+                    if (bIsUserCreated == true)
+                    {
+                        var jwt = new BoService.Authentication.JwtService(_config);
+                        var token = jwt.GenerateSecurityToken(value.UserName);
+
+                        response.Add("Status", "Success");
+                        response.Add("Message", "User is added successfully...");
+                        response.Add("token", token);
+                        response.Add("user", objUser);
+                    }
+                    else
+                    {
+                        response.Add("Status", "Error");
+                        response.Add("Message", "User Name Already Exists");
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                response.Add("status", "Error");
+                response.Add("Message", Ex.Message);
+            }
+            return response;
+        }
     }
 }
