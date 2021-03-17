@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projects\\EDC\\12March2021\\EDCOpeationsAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj": {}
+    "C:\\Projects\\EDCNew\\EDCOperationsWebAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\EDC\\12March2021\\EDCOpeationsAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj": {
+    "C:\\Projects\\EDCNew\\EDCOperationsWebAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\EDC\\12March2021\\EDCOpeationsAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj",
+        "projectUniqueName": "C:\\Projects\\EDCNew\\EDCOperationsWebAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj",
         "projectName": "EDCOperationsAPI",
-        "projectPath": "C:\\Projects\\EDC\\12March2021\\EDCOpeationsAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj",
+        "projectPath": "C:\\Projects\\EDCNew\\EDCOperationsWebAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj",
         "packagesPath": "C:\\Users\\azureuser\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\EDC\\12March2021\\EDCOpeationsAPI\\EDCOperationsAPI\\obj\\",
+        "outputPath": "C:\\Projects\\EDCNew\\EDCOperationsWebAPI\\EDCOperationsAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\azureuser\\AppData\\Roaming\\NuGet\\NuGet.Config",

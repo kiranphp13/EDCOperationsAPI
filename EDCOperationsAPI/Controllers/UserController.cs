@@ -65,7 +65,7 @@ namespace BoService.Controllers
                             Phone = reader.GetString(3),
                             Role = reader.GetString(4),
                             Id = reader.GetInt32(5),
-                            // Address = (reader.IsDBNull.)?"": Convert.ToString(reader.GetString(6)),
+                            Address = Convert.ToString(reader.GetString(6)),
                             UserName = reader.GetString(7),
                             Status = reader.GetString(8),
                         };

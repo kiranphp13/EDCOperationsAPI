@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UWexp9G1IXYiRIyEoFiirsFLKUFnQU9Q1DxOKn/AnoUvttFOwSmLfzlASI+yM1nSSX2BKefqfF386IY6YDo67w==",
+  "dgSpecHash": "lsUzUFFRvDi29vb4dk+2X+fyCI3jeyJ+SrwlXSoKoSMKNsUcjF5ECeVXE0+lRg5GLkof6tZNhndWTXQEIwTqag==",
   "success": true,
-  "projectFilePath": "C:\\Projects\\EDC\\12March2021\\EDCOpeationsAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj",
+  "projectFilePath": "C:\\Projects\\EDCNew\\EDCOperationsWebAPI\\EDCOperationsAPI\\EDCOperationsAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\azureuser\\.nuget\\packages\\jwt\\8.0.0\\jwt.8.0.0.nupkg.sha512",
     "C:\\Users\\azureuser\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.3\\microsoft.aspnetcore.authentication.jwtbearer.5.0.3.nupkg.sha512",

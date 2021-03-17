@@ -106,10 +106,14 @@ namespace BoService.Models
                         var post = new User(Db)
                         {
                             FullName = reader.GetString(0),
-                            Password = reader.GetString(1),
+                            Password = DecryptPassword(reader.GetString(1)),
                             Email = reader.GetString(2),
                             Phone = reader.GetString(3),
                             Role = reader.GetString(4),
+                            Id = reader.GetInt32(5),
+                            Address = Convert.ToString(reader.GetString(6)),
+                            UserName = reader.GetString(7),
+                            Status = reader.GetString(8),
                         };
                         posts.Add(post);
                     }
