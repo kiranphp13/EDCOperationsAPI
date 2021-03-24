@@ -115,7 +115,7 @@ namespace BoService.Controllers
                 try
                 {
                     using var cmd = Db.Connection.CreateCommand();
-                    string commandText = "SELECT * FROM edc.bousers where id=" + Convert.ToInt32(userId);
+                    string commandText = "SELECT FullName,Password,Email,Phone,Role,Id,Address,UserName,Status,DATE_FORMAT(CreatedDate,'%m/%d/%Y') AS CreatedDate FROM edc.bousers where id=" + Convert.ToInt32(userId);
                     cmd.CommandText = commandText;
                     returnList = ReadAllAsync(cmd.ExecuteReader());
                 }
