@@ -32,7 +32,7 @@ namespace BoService.Controllers
                 try
                 {
                     using var cmd = Db.Connection.CreateCommand();
-                    string commandText = "SELECT * FROM edc.bousers";
+                    string commandText = "SELECT FullName,Password,Email,Phone,Role,Id,Address,UserName,Status,DATE_FORMAT(CreatedDate,'%m/%d/%Y') AS CreatedDate from edc.bousers;";
                     cmd.CommandText = commandText;
                     returnList = ReadAllAsync(cmd.ExecuteReader());
                 }
@@ -68,6 +68,7 @@ namespace BoService.Controllers
                             Address = Convert.ToString(reader.GetString(6)),
                             UserName = reader.GetString(7),
                             Status = reader.GetString(8),
+                            CreatedDate = Convert.ToDateTime(reader.GetString(9)),
                         };
                         posts.Add(post);
                     }

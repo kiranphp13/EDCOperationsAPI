@@ -23,6 +23,8 @@ namespace BoService.Models
         public string Status { get; set; }
         public int Id { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
         internal BoAppDB Db { get; set; }
 
         public User()
