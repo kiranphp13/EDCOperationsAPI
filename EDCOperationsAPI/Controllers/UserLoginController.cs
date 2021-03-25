@@ -62,6 +62,10 @@ namespace BoService.Controllers
                 response.Add("Status", "Error");
                 response.Add("Message", Ex.Message);
             }
+            finally
+            {
+                Db.Connection.Close();
+            }
             return response;
         }
 

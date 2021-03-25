@@ -47,6 +47,10 @@ namespace BoService.Controllers
             {
                 throw;
             }
+            finally
+            {
+                Db.Connection.Close();
+            }
         }
         private List<User> ReadAllAsync(System.Data.Common.DbDataReader reader)
         {
@@ -130,6 +134,11 @@ namespace BoService.Controllers
             {
                 throw;
             }
+            finally
+            {
+                Db.Connection.Close();
+            }
+
         }
         //// POST api/<controller>  
         //[System.Web.Http.HttpPost]
@@ -197,6 +206,11 @@ namespace BoService.Controllers
             {
                 response.Add("status", "Error");
                 response.Add("Message", Ex.Message);
+
+            }
+            finally
+            {
+                Db.Connection.Close();
             }
             return response;
         }
@@ -244,6 +258,10 @@ namespace BoService.Controllers
                 response.Add("status", "Error");
                 response.Add("Message", Ex.Message);
             }
+            finally
+            {
+                Db.Connection.Close();
+            }
             return response;
         }
 
@@ -290,6 +308,10 @@ namespace BoService.Controllers
             {
                 response.Add("status", "Error");
                 response.Add("Message", Ex.Message);
+            }
+            finally
+            {
+                Db.Connection.Close();
             }
             return response;
         }
