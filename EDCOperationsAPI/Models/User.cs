@@ -200,8 +200,9 @@ namespace BoService.Models
             bool bIsRecordAdded = false;
             try
             {
-
-                string Query = "insert into edc.bousers(FullName,UserName,Password,Email,Phone,Role,Status) values('" + userData.UserName + "','" + userData.FullName + "','" + userData.Password + "','" + userData.Email + "','" + userData.Phone + "','" + userData.Role + "','" + userData.Status + "');";
+                string strEncryptedPassword = EncryptPassword(userData.Password);
+                string Query = "insert into edc.bousers(FullName,UserName,Password,Email,Phone,Address,Role,Status,CreatedDate) values('" + userData.FullName + "','" + userData.UserName + "','" + strEncryptedPassword + "','" + userData.Email + "','" + userData.Phone + "','" + userData.Address + "','" + userData.Role + "','" + userData.Status 
+                    + "','"+ System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "')";
                 var cmd = Db.Connection.CreateCommand();
                 cmd.CommandText = Query;
                 cmd.ExecuteNonQuery();

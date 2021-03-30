@@ -51,6 +51,13 @@ namespace BoService.Controllers
             {
                 Db.Connection.Close();
             }
+
+        }
+        public static string SafeGetString(System.Data.Common.DbDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+                return reader.GetString(colIndex);
+            return string.Empty;
         }
         private List<User> ReadAllAsync(System.Data.Common.DbDataReader reader)
         {
@@ -63,15 +70,16 @@ namespace BoService.Controllers
                     {
                         var post = new User(Db)
                         {
-                            FullName = reader.GetString(0),
-                            Password = DecryptPassword(reader.GetString(1)),
-                            Email = reader.GetString(2),
-                            Phone = reader.GetString(3),
-                            Role = reader.GetString(4),
+                            
+                            FullName = SafeGetString(reader,0),
+                            Password = DecryptPassword(SafeGetString(reader, 1)),
+                            Email = SafeGetString(reader, 2),
+                            Phone = SafeGetString(reader, 3),
+                            Role = SafeGetString(reader, 4),
                             Id = reader.GetInt32(5),
-                            Address = Convert.ToString(reader.GetString(6)),
-                            UserName = reader.GetString(7),
-                            Status = reader.GetString(8),
+                            Address = SafeGetString(reader, 6),
+                            UserName = SafeGetString(reader, 7),
+                            Status = SafeGetString(reader, 8),
                             CreatedDate = Convert.ToDateTime(reader.GetString(9)),
                         };
                         posts.Add(post);
