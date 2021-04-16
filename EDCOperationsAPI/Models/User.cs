@@ -21,6 +21,10 @@ namespace BoService.Models
         public string Token { get; set; }
 
         public string Status { get; set; }
+
+        public int RoleId { get; set; }
+
+       public int StatusId { get; set; }
         public int Id { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -53,7 +57,7 @@ namespace BoService.Models
             {
                 string strEncryptedPassword = EncryptPassword(strUserOassword);
                 using var cmd = Db.Connection.CreateCommand();
-                string commandText = "SELECT * FROM edc.bousers where username = " + "'" + strUserName + "'" + "and password = " + "'" + strEncryptedPassword + "'";
+                string commandText = "Call p_GetAllUsers('" + strUserName + "','" + strEncryptedPassword + "')";
                 cmd.CommandText = commandText;
                 returnList = ReadAllAsync(cmd.ExecuteReader());
             }
@@ -69,7 +73,7 @@ namespace BoService.Models
             try
             {
                 using var cmd = Db.Connection.CreateCommand();
-                string commandText = "SELECT * FROM edc.bousers where username = " + "'" + strUserName + "'";
+                string commandText = "Call p_GetAllUsers('" + strUserName + "',NULL)";
                 cmd.CommandText = commandText;
                 returnList = ReadAllAsync(cmd.ExecuteReader());
             }
@@ -85,7 +89,7 @@ namespace BoService.Models
             try
             {
                 using var cmd = Db.Connection.CreateCommand();
-                string commandText = "SELECT * FROM edc.bousers where username = " + "'" + strUserName + "' and id <>" + userId;
+                string commandText = "call p_GetAllUsersByUserNameEdit('" + strUserName + "'," + userId+")";
                 cmd.CommandText = commandText;
                 returnList = ReadAllAsync(cmd.ExecuteReader());
             }
@@ -96,6 +100,12 @@ namespace BoService.Models
             return returnList;
         }
 
+        public static string SafeGetString(System.Data.Common.DbDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+                return reader.GetString(colIndex);
+            return string.Empty;
+        }
         private List<User> ReadAllAsync(System.Data.Common.DbDataReader reader)
         {
             List<User> posts = new List<User>();
@@ -107,15 +117,18 @@ namespace BoService.Models
                     {
                         var post = new User(Db)
                         {
-                            FullName = reader.GetString(0),
-                            Password = DecryptPassword(reader.GetString(1)),
-                            Email = reader.GetString(2),
-                            Phone = reader.GetString(3),
-                            Role = reader.GetString(4),
-                            Id = reader.GetInt32(5),
-                            Address = Convert.ToString(reader.GetString(6)),
-                            UserName = reader.GetString(7),
-                            Status = reader.GetString(8),
+                            Id = reader.GetInt32(0),
+                            FullName = SafeGetString(reader, 1),
+                            UserName = SafeGetString(reader, 2),
+                            Email = SafeGetString(reader, 3),
+                            Password = DecryptPassword(SafeGetString(reader, 4)),
+                            Phone = SafeGetString(reader, 5),
+                            Address = SafeGetString(reader, 6),
+                            Status = SafeGetString(reader, 7),
+                            CreatedDate = Convert.ToDateTime(reader.GetString(8)),
+                            Role = SafeGetString(reader, 9),
+                            RoleId = reader.GetInt32(10),
+                            StatusId = reader.GetInt32(11),
                         };
                         posts.Add(post);
                     }
@@ -201,8 +214,10 @@ namespace BoService.Models
             try
             {
                 string strEncryptedPassword = EncryptPassword(userData.Password);
-                string Query = "insert into edc.bousers(FullName,UserName,Password,Email,Phone,Address,Role,Status,CreatedDate) values('" + userData.FullName + "','" + userData.UserName + "','" + strEncryptedPassword + "','" + userData.Email + "','" + userData.Phone + "','" + userData.Address + "','" + userData.Role + "','" + userData.Status 
-                    + "','"+ System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "')";
+                //string Query = "insert into edc.bousers(FullName,UserName,Password,Email,Phone,Address,Role,Status,CreatedDate) values('" + userData.FullName + "','" + userData.UserName + "','" + strEncryptedPassword + "','" + userData.Email + "','" + userData.Phone + "','" + userData.Address + "','" + userData.Role + "','" + userData.Status 
+                //    + "','"+ System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "')";
+                string Query = "call p_insertUsers('" + userData.FullName + "','" + userData.UserName + "','" + userData.Email + "','" + strEncryptedPassword + "','" + userData.Phone + "','" + userData.Address +
+                     "'," + userData.StatusId + ",'" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "'," + userData.RoleId + ")";
                 var cmd = Db.Connection.CreateCommand();
                 cmd.CommandText = Query;
                 cmd.ExecuteNonQuery();
@@ -221,8 +236,10 @@ namespace BoService.Models
             try
             {
                 string strEncryptedPassword = EncryptPassword(userData.Password);
-                string Query = "update edc.bousers set FullName='" + userData.FullName + "',UserName='" + userData.UserName + "',Password='" + strEncryptedPassword + "',Email='" + userData.Email + "'," +
-                    "Phone='" + userData.Phone + "',Role='" + userData.Role + "',Status='" + userData.Status + "',Address='" + userData.Address + "' where id=" + userData.Id + ";";
+                //string Query = "call p_UpdateUsers set FullName='" + userData.FullName + "',UserName='" + userData.UserName + "',Password='" + strEncryptedPassword + "',Email='" + userData.Email + "'," +
+                //    "Phone='" + userData.Phone + "',Role='" + userData.Role + "',Status='" + userData.Status + "',Address='" + userData.Address + "' where id=" + userData.Id + ";";
+                string Query = "call p_UpdateUsers('" + userData.FullName + "','" + userData.UserName + "','" + userData.Email + "','" + strEncryptedPassword + "','" + userData.Phone + "','" + userData.Address +
+                     "'," + userData.StatusId + ",'" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "'," + userData.RoleId + ","+ userData.Id+ ")";
                 var cmd = Db.Connection.CreateCommand();
                 cmd.CommandText = Query;
                 cmd.ExecuteNonQuery();
@@ -286,8 +303,8 @@ namespace BoService.Models
             try
             {
                 string strEncryptedPassword = EncryptPassword(userData.Password);
-                string Query = "update edc.bousers set FullName='" + userData.FullName + "',UserName='" + userData.UserName + "',Password='" + strEncryptedPassword + "',Email='" + userData.Email + "'," +
-                    "Phone='" + userData.Phone + "',Address='" + userData.Address + "' where id=" + userData.Id + ";";
+                string Query = "call p_UpdateUsers('" + userData.FullName + "','" + userData.UserName + "','" + userData.Email + "','" + strEncryptedPassword + "','" + userData.Phone + "','" + userData.Address +
+                     "'," + userData.StatusId + ",'" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "'," + userData.RoleId + "," + userData.Id + ")";
                 var cmd = Db.Connection.CreateCommand();
                 cmd.CommandText = Query;
                 cmd.ExecuteNonQuery();
