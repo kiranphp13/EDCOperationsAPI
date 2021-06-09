@@ -14,10 +14,9 @@ namespace BoService.Models.Administration
         public string Type { get; set; }
         public string Description { get; set; }
         public string UpdatedBy { get; set; }
-        // public DateTime UpdateDate { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public int UpdatedByUserId { get; set; }
+        public DateTime UpdateDate { get; set; }
+       
         public ContactType()
         {
         }
