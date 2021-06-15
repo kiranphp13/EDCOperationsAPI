@@ -9,10 +9,10 @@ namespace EDCOperationsAPI.Controllers.Administration
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CollateralController : Controller
+    public class UserStatusController : Controller
     {
         public BoAppDB Db { get; }
-        public CollateralController(BoAppDB db)
+        public UserStatusController(BoAppDB db)
         {
             Db = db;
         }
@@ -22,20 +22,19 @@ namespace EDCOperationsAPI.Controllers.Administration
         public async Task<IActionResult> GetAll()
         {
             await Db.Connection.OpenAsync();
-            var query = new BoService.Models.Administration.CollateralQuery(Db);
+            var query = new BoService.Models.Administration.UserStatusQuery(Db);
             var result = await query.GetAll();
             int length = result.Count;
 
             return new OkObjectResult(result);
         }
 
-
         [HttpGet("{id}")]
         [Route("GetOne")]
         public async Task<IActionResult> GetOne(int id)
         {
             await Db.Connection.OpenAsync();
-            var query = new BoService.Models.Administration.CollateralQuery(Db);
+            var query = new BoService.Models.Administration.UserStatusQuery(Db);
             var result = await query.GetByID(id);
             if (result is null)
                 return new NotFoundResult();
@@ -44,10 +43,10 @@ namespace EDCOperationsAPI.Controllers.Administration
 
         // POST api/contacttype
         [HttpPost]
-        public async Task<Dictionary<string, object>> Post([FromBody] BoService.Models.Administration.Collateral body)
+        public async Task<Dictionary<string, object>> Post([FromBody] BoService.Models.Administration.UserStatus body)
         {
             await Db.Connection.OpenAsync();
-            var query = new BoService.Models.Administration.CollateralQuery(Db);
+            var query = new BoService.Models.Administration.UserStatusQuery(Db);
             Dictionary<string, object> response = new Dictionary<string, object>();
 
             //Check Record Existws
@@ -97,13 +96,13 @@ namespace EDCOperationsAPI.Controllers.Administration
 
         // PUT api/contacttype/5
         [HttpPut("{id}")]
-        public async Task<Dictionary<string, object>> PutOne(int id, [FromBody] BoService.Models.Administration.Collateral body)
+        public async Task<Dictionary<string, object>> PutOne(int id, [FromBody] BoService.Models.Administration.UserStatus body)
         {
             Dictionary<string, object> response = new Dictionary<string, object>();
 
             await Db.Connection.OpenAsync();
-            var query = new BoService.Models.Administration.CollateralQuery(Db);
-           
+            var query = new BoService.Models.Administration.UserStatusQuery(Db);
+
             try
             {
                 var rec_exists = await query.GetByID(id);

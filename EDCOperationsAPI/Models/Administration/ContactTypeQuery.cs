@@ -23,7 +23,7 @@ namespace BoService.Models.Administration
             using var cmd = Db.Connection.CreateCommand();
             //cmd.CommandText = @"SELECT * FROM `contact_types` WHERE `CTYP_SEQNO` = @id";
             //cmd.CommandText = @"SELECT * FROM `contact_types` WHERE `CTYP_SEQNO` = @id";
-            cmd.CommandText = "call p_GetContactTypeById(" + Convert.ToInt32(id) + ")";
+            cmd.CommandText = "call p_ContactType_GetById(" + Convert.ToInt32(id) + ")";
             //p_GetContactTypeById
             List<ContactType> list = new List<ContactType>();
             using (var reader = cmd.ExecuteReader())
@@ -44,12 +44,33 @@ namespace BoService.Models.Administration
             return list.Count > 0 ? list[0] : null;
         }
 
+        public async Task<ContactType> GetContactTypeByName(string name, int id)
+        {
+            using var cmd = Db.Connection.CreateCommand();
+            cmd.CommandText = "call p_ContactType_GetByName('" + name + "'," + Convert.ToInt32(id) + ")";
+            List<ContactType> list = new List<ContactType>();
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (await reader.ReadAsync())
+                {
+                    list.Add(new ContactType()
+                    {
+                        //Id = reader.GetInt32(0),
+                        Type = reader.GetString(0)
+                        //Description = reader.GetString(2)                       
+                    });
+                }
+            }
+
+            return list.Count > 0 ? list[0] : null;
+        }
+
 
         public async Task<List<ContactType>> GetAllContactTypes()
         {
             List<ContactType> list = new List<ContactType>();
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = "Call p_GetAllContactTypes()";
+            cmd.CommandText = "Call p_ContactType_GetAll()";
             using (var reader = cmd.ExecuteReader())
             {
                 while (await reader.ReadAsync())

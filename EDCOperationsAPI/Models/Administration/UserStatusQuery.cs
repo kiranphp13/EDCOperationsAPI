@@ -9,56 +9,54 @@ using MySqlConnector;
 
 namespace BoService.Models.Administration
 {
-    public class CollateralQuery
+    public class UserStatusQuery
     {
         public BoAppDB Db { get; }
 
-        public CollateralQuery(BoAppDB db)
+        public UserStatusQuery(BoAppDB db)
         {
             Db = db;
         }
 
-        public async Task<List<Collateral>> GetAll()
+        public async Task<List<UserStatus>> GetAll()
         {
-            List<Collateral> list = new List<Collateral>();
+            List<UserStatus> list = new List<UserStatus>();
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = "Call p_Collateral_GetAll()";
+            cmd.CommandText = "Call p_UserStatus_GetAll()";
             using (var reader = cmd.ExecuteReader())
             {
                 while (await reader.ReadAsync())
                 {
-                    list.Add(new Collateral()
+                    list.Add(new UserStatus()
                     {
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
-                        Description = !reader.IsDBNull(2) ? reader.GetString(2) : "",
-                        UpdateDate = reader.GetDateTime(3),
-                        UpdatedByUserId = reader.GetInt32(4),
-                        UpdatedBy = reader.GetString(5)
+                        UpdateDate = reader.GetDateTime(2),
+                        UpdatedByUserId = reader.GetInt32(3),
+                        UpdatedBy = reader.GetString(4)
                     });
                 }
             }
             return list;
         }
 
-        public async Task<Collateral> GetByID(int id)
+        public async Task<UserStatus> GetByID(int id)
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = "call p_Collateral_GetById(" + Convert.ToInt32(id) + ")";
+            cmd.CommandText = "call p_UserStatus_GetById(" + Convert.ToInt32(id) + ")";
             //p_GetContactTypeById
-            List<Collateral> list = new List<Collateral>();
+            List<UserStatus> list = new List<UserStatus>();
             using (var reader = cmd.ExecuteReader())
             {
                 while (await reader.ReadAsync())
                 {
-                    list.Add(new Collateral()
+                    list.Add(new UserStatus()
                     {
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
-                        Description = !reader.IsDBNull(2) ? reader.GetString(2) : "",
-                        UpdateDate = reader.GetDateTime(3),
-                        UpdatedByUserId = reader.GetInt32(4),
-                        UpdatedBy = reader.GetString(5)
+                        UpdateDate = reader.GetDateTime(2),
+                        UpdatedByUserId = reader.GetInt32(3),
+                        UpdatedBy = reader.GetString(4)
                     });
                 }
             }
@@ -66,16 +64,16 @@ namespace BoService.Models.Administration
             return list.Count > 0 ? list[0] : null;
         }
 
-        public async Task<Collateral> GetByName(string name, int id)
+        public async Task<UserStatus> GetByName(string name, int id)
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = "call p_Collateral_GetByName('" + name + "'," + Convert.ToInt32(id) + ")";
-            List<Collateral> list = new List<Collateral>();
+            cmd.CommandText = "call p_UserStatus_GetByName('" + name + "'," + Convert.ToInt32(id) + ")";
+            List<UserStatus> list = new List<UserStatus>();
             using (var reader = cmd.ExecuteReader())
             {
                 while (await reader.ReadAsync())
                 {
-                    list.Add(new Collateral()
+                    list.Add(new UserStatus()
                     {
                         Name = reader.GetString(0)
                     });
@@ -86,29 +84,27 @@ namespace BoService.Models.Administration
         }
 
 
-        public async Task<int> CreateRecord(Collateral inputData)
+        public async Task<int> CreateRecord(UserStatus inputData)
         {
             DateTime theDate = DateTime.Now;
             var sysDate = theDate.ToString("yyyy-MM-dd H:mm:ss");
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"INSERT INTO `collateral` (`COLL_SDES`, `COLL_LDES`,`COLL_DATE`,`COLL_UPDATED_BY_USER_ID`) VALUES (@sdes, @ldes, @dt, @uid);";
-            cmd.Parameters.AddWithValue("@sdes", inputData.Name);
-            cmd.Parameters.AddWithValue("@ldes", inputData.Description);
+            cmd.CommandText = @"INSERT INTO `user_status` (`ST_STATUS`, `ST_DATE`,`ST_UPDATED_BY_USER_ID`) VALUES (@name, @dt, @uid);";
+            cmd.Parameters.AddWithValue("@name", inputData.Name);
             cmd.Parameters.AddWithValue("@dt", sysDate);
             cmd.Parameters.AddWithValue("@uid", inputData.UpdatedByUserId);
             await cmd.ExecuteNonQueryAsync();
             return (int)cmd.LastInsertedId;
         }
 
-        public async Task<int> UpdateRecord(int id, Collateral inputData)
+        public async Task<int> UpdateRecord(int id, UserStatus inputData)
         {
             DateTime theDate = DateTime.Now;
             var sysDate = theDate.ToString("yyyy-MM-dd H:mm:ss");
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"UPDATE `collateral` SET `COLL_SDES` = @name, `COLL_LDES` = @description, `COLL_DATE` = @dt, `COLL_UPDATED_BY_USER_ID` = @uid WHERE `COLL_SEQNO` = @id;";
+            cmd.CommandText = @"UPDATE `user_status` SET `ST_STATUS` = @name,`ST_DATE` = @dt, `ST_UPDATED_BY_USER_ID` = @uid WHERE `ST_SEQNO` = @id;";
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Parameters.AddWithValue("@name", inputData.Name);
-            cmd.Parameters.AddWithValue("@description", inputData.Description);
             cmd.Parameters.AddWithValue("@uid", inputData.UpdatedByUserId);
             cmd.Parameters.AddWithValue("@dt", sysDate);
             var recs = await cmd.ExecuteNonQueryAsync();
