@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using BoService.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BoService.Controllers
 {
@@ -22,24 +22,24 @@ namespace BoService.Controllers
         }
         // POST api/blog
         [HttpPost]
-        public Dictionary<string, object> Post([FromBody] BoService.Models.User value)
+        public Dictionary<string, object> Post([FromBody] BoService.Models.UserLogin value)
         {
             Dictionary<string, object> response = new Dictionary<string, object>();
             try
             {
                 Db.Connection.Open();
                 bool bIsValidUser = false;
-                string username = value.UserName;
+                string username = value.Username;
                 string password = value.Password;
                 BoService.Models.User objUsers = new BoService.Models.User(Db);
 
-                User lstobjUsers = objUsers.GetUsersList(value.UserName, value.Password).FirstOrDefault();
+                User lstobjUsers = objUsers.GetUsersList(username, password).FirstOrDefault();
 
                 //bIsValidUser = objUsers.IsUserRegistered();
                 if (lstobjUsers != null)
                 {
                     var jwt = new BoService.Authentication.JwtService(_config);
-                    var token = jwt.GenerateSecurityToken(value.Email);
+                    var token = jwt.GenerateSecurityToken(value.Username);
 
                     //if(lstobjUsers.Role.Contains("Member"))
                     //{
