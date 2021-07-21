@@ -74,7 +74,7 @@ ActiveStatus
 
         public int StateId { get; set; }
 
-        public string StateName { get; set; }
+        public string State { get; set; }
 
         public string Zip { get; set; }
 
@@ -84,6 +84,10 @@ ActiveStatus
         public string Email { get; set; }
 
         public string ActiveStatus { get; set; }
+
+        public string Profession { get; set; }
+
+        
 
         public Prospect()
         {

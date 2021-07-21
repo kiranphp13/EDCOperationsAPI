@@ -43,39 +43,25 @@ namespace EDCOperationsAPI.Controllers.Contacts
 
         // POST api/contacttype
         [HttpPost]
-        public async Task<Dictionary<string, object>> Post([FromBody] BoService.Models.Administration.Association body)
+        public async Task<Dictionary<string, object>> Post([FromBody] BoService.Models.Contacts.Prospect body)
         {
             await Db.Connection.OpenAsync();
-            var query = new BoService.Models.Administration.AssociationQuery(Db);
+            var query = new BoService.Models.Contacts.ProspectQuery(Db);
             Dictionary<string, object> response = new Dictionary<string, object>();
 
-            //Check Record Existws
             try
             {
-                string name = body.Name;
-                var result = await query.GetByName(name, 0);
-                if (result != null)
-                {
-                    response.Add("status", "Error");
-                    response.Add("message", "Name Already Exists");
+                int rec_no = await query.CreateRecord(body);
 
+                if (rec_no > 0)
+                {
+                    response.Add("status", "Success");
+                    response.Add("message", "Record Created Exists");
+                    response.Add("rec_no", rec_no);
                 }
                 else
                 {
-                    int rec_no = await query.CreateRecord(body);
-
-                    if (rec_no > 0)
-                    {
-                        response.Add("status", "Success");
-                        response.Add("message", "Record Created Exists");
-                        response.Add("rec_no", rec_no);
-
-                    }
-                    else
-                    {
-                        throw new Exception("Record Insert Error");
-                    }
-
+                    throw new Exception("Record Insert Error");
                 }
 
             }
