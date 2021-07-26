@@ -87,7 +87,9 @@ ActiveStatus
 
         public string Profession { get; set; }
 
-        
+        public int ContactCategoryId { get; set; }
+
+
 
         public Prospect()
         {

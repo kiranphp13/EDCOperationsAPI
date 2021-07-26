@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDCOperationsAPI.Controllers.Contacts
 {
-    [Route("api/[controller]")]
+    [Route("api/agencies-list")]
     [ApiController]
     public class AgencyController : Controller
     {

@@ -133,6 +133,8 @@ namespace BoService.Models.Contacts
                         Email = !reader.IsDBNull(reader.GetOrdinal("CTCT_EMAIL")) ? reader.GetValue(reader.GetOrdinal("CTCT_EMAIL")).ToString() : "",
                         UpdatedByUserId = !reader.IsDBNull(reader.GetOrdinal("CTCT_UPDATED_BY_USER_ID")) ? Convert.ToInt32(reader.GetValue(reader.GetOrdinal("CTCT_UPDATED_BY_USER_ID"))) : 0,
                         AgencyName = !reader.IsDBNull(reader.GetOrdinal("AGCY_NAME")) ? reader.GetValue(reader.GetOrdinal("AGCY_NAME")).ToString() : "",
+                        ContactCategoryId = !reader.IsDBNull(reader.GetOrdinal("CTCT_CCAT_SEQNO")) ? Convert.ToInt32(reader.GetValue(reader.GetOrdinal("CTCT_CCAT_SEQNO"))) : 0,
+                        ContactTypeId = !reader.IsDBNull(reader.GetOrdinal("CTCT_CTYP_SEQNO")) ? Convert.ToInt32(reader.GetValue(reader.GetOrdinal("CTCT_CTYP_SEQNO"))) : 0,
 
                     });
                 }
@@ -168,8 +170,8 @@ namespace BoService.Models.Contacts
             using var cmd = Db.Connection.CreateCommand();
             //cmd.CommandText = @"INSERT INTO `contacts` (`CTCT_DATE`,CTCT_UPDATED_BY_USER_ID) VALUES (@dt, @uid);";
             //cmd.Parameters.AddWithValue("@dt", sysDate);
-            cmd.CommandText = @"INSERT INTO `contacts` (`CTCT_DATE`,CTCT_UPDATED_BY_USER_ID,`CTCT_SALUTE`,`CTCT_FIRST`,`CTCT_LAST`,`CTCT_TITLE`,`CTCT_COMPANY`,`CTCT_ADDR1`,`CTCT_ADDR2`,`CTCT_CITY`,`CTCT_STATE`,`CTCT_COUNTRY`,`CTCT_ZIP`,`CTCT_PHONE1`,`CTCT_PHONE2`,`CTCT_ACTIVE_STATUS`,`CTCT_EMAIL`,`CTCT_MIDDLE`,CTCT_AGCY_SEQNO,CTCT_CTYP_TYPE_ID)
-VALUES (@dt, @uid, @salute, @fname, @lname, @title, @company, @addr1, @addr2, @city, @state, @country, @zip, @phone1, @phone2, @active_status, @email, @mname,@agency_id,@ctype_id);"; 
+            cmd.CommandText = @"INSERT INTO `contacts` (`CTCT_DATE`,CTCT_UPDATED_BY_USER_ID,`CTCT_SALUTE`,`CTCT_FIRST`,`CTCT_LAST`,`CTCT_TITLE`,`CTCT_COMPANY`,`CTCT_ADDR1`,`CTCT_ADDR2`,`CTCT_CITY`,`CTCT_STATE`,`CTCT_COUNTRY`,`CTCT_ZIP`,`CTCT_PHONE1`,`CTCT_PHONE2`,`CTCT_ACTIVE_STATUS`,`CTCT_EMAIL`,`CTCT_MIDDLE`,CTCT_AGCY_SEQNO,CTCT_CTYP_SEQNO,CTCT_CCAT_SEQNO)
+VALUES (@dt, @uid, @salute, @fname, @lname, @title, @company, @addr1, @addr2, @city, @state, @country, @zip, @phone1, @phone2, @active_status, @email, @mname,@agency_id,@ctype_id,@ccat_id);"; 
             cmd.Parameters.AddWithValue("@dt", sysDate);
             cmd.Parameters.AddWithValue("@uid", inputData.UpdatedByUserId);
             cmd.Parameters.AddWithValue("@salute", inputData.Salute);
@@ -190,6 +192,7 @@ VALUES (@dt, @uid, @salute, @fname, @lname, @title, @company, @addr1, @addr2, @c
             cmd.Parameters.AddWithValue("@mname", inputData.Middle);
             cmd.Parameters.AddWithValue("@agency_id", inputData.AgencyId);
             cmd.Parameters.AddWithValue("@ctype_id", inputData.ContactTypeId);
+            cmd.Parameters.AddWithValue("@ccat_id", inputData.ContactCategoryId);
 
             await cmd.ExecuteNonQueryAsync();
 
@@ -201,7 +204,7 @@ VALUES (@dt, @uid, @salute, @fname, @lname, @title, @company, @addr1, @addr2, @c
             DateTime theDate = DateTime.Now;
             var sysDate = theDate.ToString("yyyy-MM-dd H:mm:ss");
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"UPDATE `associations` SET `ASSN_SDES` = @name, `ASSN_LDES` = @description, `ASSN_DATE` = @dt, `ASSN_UPDATED_BY_USER_ID` = @uid WHERE `ASSN_SEQNO` = @id;";
+            cmd.CommandText = @"UPDATE `contacts` SET `CTCT_DATE` = @dt, `ASSN_LDES` = @description, `ASSN_DATE` = @dt, `ASSN_UPDATED_BY_USER_ID` = @uid WHERE `ASSN_SEQNO` = @id;";
             cmd.Parameters.AddWithValue("@id", id);
             //cmd.Parameters.AddWithValue("@name", inputData.Name);
             //cmd.Parameters.AddWithValue("@description", inputData.Description);
