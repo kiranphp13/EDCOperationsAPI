@@ -82,12 +82,12 @@ namespace EDCOperationsAPI.Controllers.Contacts
 
         // PUT api/contacttype/5
         [HttpPut("{id}")]
-        public async Task<Dictionary<string, object>> PutOne(int id, [FromBody] BoService.Models.Administration.Association body)
+        public async Task<Dictionary<string, object>> PutOne(int id, [FromBody] BoService.Models.Contacts.Prospect body)
         {
             Dictionary<string, object> response = new Dictionary<string, object>();
 
             await Db.Connection.OpenAsync();
-            var query = new BoService.Models.Administration.AssociationQuery(Db);
+            var query = new BoService.Models.Contacts.ProspectQuery(Db);
 
             try
             {
@@ -97,30 +97,18 @@ namespace EDCOperationsAPI.Controllers.Contacts
                     throw new Exception("Record not found");
                 }
 
-                string name = body.Name;
-                var result = await query.GetByName(name, id);
-                if (result != null)
+                int rec_no = await query.UpdateRecord(id, body);
+
+                if (rec_no > 0)
                 {
-                    response.Add("status", "Error");
-                    response.Add("message", "Name Already Exists");
+                    response.Add("status", "Success");
+                    response.Add("message", "Record updated successfully");
+                    response.Add("rec_no", rec_no);
 
                 }
                 else
                 {
-                    int rec_no = await query.UpdateRecord(id, body);
-
-                    if (rec_no > 0)
-                    {
-                        response.Add("status", "Success");
-                        response.Add("message", "Record updated successfully");
-                        response.Add("rec_no", rec_no);
-
-                    }
-                    else
-                    {
-                        throw new Exception("Record Insert Error");
-                    }
-
+                    throw new Exception("Record Insert Error");
                 }
 
             }

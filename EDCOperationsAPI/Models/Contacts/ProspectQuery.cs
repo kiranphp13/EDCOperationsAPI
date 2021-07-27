@@ -170,7 +170,12 @@ namespace BoService.Models.Contacts
             using var cmd = Db.Connection.CreateCommand();
             //cmd.CommandText = @"INSERT INTO `contacts` (`CTCT_DATE`,CTCT_UPDATED_BY_USER_ID) VALUES (@dt, @uid);";
             //cmd.Parameters.AddWithValue("@dt", sysDate);
-            cmd.CommandText = @"INSERT INTO `contacts` (`CTCT_DATE`,CTCT_UPDATED_BY_USER_ID,`CTCT_SALUTE`,`CTCT_FIRST`,`CTCT_LAST`,`CTCT_TITLE`,`CTCT_COMPANY`,`CTCT_ADDR1`,`CTCT_ADDR2`,`CTCT_CITY`,`CTCT_STATE`,`CTCT_COUNTRY`,`CTCT_ZIP`,`CTCT_PHONE1`,`CTCT_PHONE2`,`CTCT_ACTIVE_STATUS`,`CTCT_EMAIL`,`CTCT_MIDDLE`,CTCT_AGCY_SEQNO,CTCT_CTYP_SEQNO,CTCT_CCAT_SEQNO)
+            cmd.CommandText = @"INSERT INTO `contacts` (
+`CTCT_DATE`,
+CTCT_UPDATED_BY_USER_ID,
+`CTCT_SALUTE`,
+`CTCT_FIRST`,
+`CTCT_LAST`,`CTCT_TITLE`,`CTCT_COMPANY`,`CTCT_ADDR1`,`CTCT_ADDR2`,`CTCT_CITY`,`CTCT_STATE`,`CTCT_COUNTRY`,`CTCT_ZIP`,`CTCT_PHONE1`,`CTCT_PHONE2`,`CTCT_ACTIVE_STATUS`,`CTCT_EMAIL`,`CTCT_MIDDLE`,CTCT_AGCY_SEQNO,CTCT_CTYP_SEQNO,CTCT_CCAT_SEQNO)
 VALUES (@dt, @uid, @salute, @fname, @lname, @title, @company, @addr1, @addr2, @city, @state, @country, @zip, @phone1, @phone2, @active_status, @email, @mname,@agency_id,@ctype_id,@ccat_id);"; 
             cmd.Parameters.AddWithValue("@dt", sysDate);
             cmd.Parameters.AddWithValue("@uid", inputData.UpdatedByUserId);
@@ -204,12 +209,51 @@ VALUES (@dt, @uid, @salute, @fname, @lname, @title, @company, @addr1, @addr2, @c
             DateTime theDate = DateTime.Now;
             var sysDate = theDate.ToString("yyyy-MM-dd H:mm:ss");
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"UPDATE `contacts` SET `CTCT_DATE` = @dt, `ASSN_LDES` = @description, `ASSN_DATE` = @dt, `ASSN_UPDATED_BY_USER_ID` = @uid WHERE `ASSN_SEQNO` = @id;";
+            cmd.CommandText = @"UPDATE `contacts` SET 
+`CTCT_DATE` = @dt, 
+`CTCT_UPDATED_BY_USER_ID` = @uid, 
+`CTCT_SALUTE` = @salute, 
+`CTCT_FIRST` = @fname,
+`CTCT_LAST` = @lname,
+`CTCT_TITLE` = @title,
+`CTCT_COMPANY` = @company,
+`CTCT_ADDR1` = @addr1,
+`CTCT_ADDR2` = @addr2,
+`CTCT_CITY` = @city,
+`CTCT_STATE` = @state,
+`CTCT_COUNTRY` = @country,
+`CTCT_ZIP` = @zip,
+`CTCT_PHONE1` = @phone1,
+`CTCT_PHONE2` = @phone2,
+`CTCT_ACTIVE_STATUS` = @active_status,
+`CTCT_EMAIL` = @email,
+`CTCT_MIDDLE` = @mname,
+`CTCT_AGCY_SEQNO` = @agency_id,
+`CTCT_CTYP_SEQNO` = @ctype_id,
+`CTCT_CCAT_SEQNO` = @ccat_id
+WHERE `CTCT_SEQNO` = @id;";
             cmd.Parameters.AddWithValue("@id", id);
-            //cmd.Parameters.AddWithValue("@name", inputData.Name);
-            //cmd.Parameters.AddWithValue("@description", inputData.Description);
-            cmd.Parameters.AddWithValue("@uid", inputData.UpdatedByUserId);
             cmd.Parameters.AddWithValue("@dt", sysDate);
+            cmd.Parameters.AddWithValue("@uid", inputData.UpdatedByUserId);
+            cmd.Parameters.AddWithValue("@salute", inputData.Salute);
+            cmd.Parameters.AddWithValue("@fname", inputData.First);
+            cmd.Parameters.AddWithValue("@lname", inputData.Last);
+            cmd.Parameters.AddWithValue("@title", inputData.Title);
+            cmd.Parameters.AddWithValue("@company", inputData.Company);
+            cmd.Parameters.AddWithValue("@addr1", inputData.Address1);
+            cmd.Parameters.AddWithValue("@addr2", inputData.Address2);
+            cmd.Parameters.AddWithValue("@city", inputData.City);
+            cmd.Parameters.AddWithValue("@state", inputData.State);
+            cmd.Parameters.AddWithValue("@country", inputData.Country);
+            cmd.Parameters.AddWithValue("@zip", inputData.Zip);
+            cmd.Parameters.AddWithValue("@phone1", inputData.Phone1);
+            cmd.Parameters.AddWithValue("@phone2", inputData.Phone2);
+            cmd.Parameters.AddWithValue("@active_status", inputData.ActiveStatus);
+            cmd.Parameters.AddWithValue("@email", inputData.Email);
+            cmd.Parameters.AddWithValue("@mname", inputData.Middle);
+            cmd.Parameters.AddWithValue("@agency_id", inputData.AgencyId);
+            cmd.Parameters.AddWithValue("@ctype_id", inputData.ContactTypeId);
+            cmd.Parameters.AddWithValue("@ccat_id", inputData.ContactCategoryId);
             var recs = await cmd.ExecuteNonQueryAsync();
             return recs;
         }
